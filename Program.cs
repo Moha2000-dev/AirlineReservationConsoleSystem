@@ -15,7 +15,10 @@
         {
             DisplayWelcomeMessage();
             ShowMenu();
-            AddFlight("AI101", "New York", "Los Angeles", new DateTime(2023, 10, 15, 10, 0, 0), 6);
+            Console.Write("Please enter a date and time (e.g., 2025-04-10 14:30): ");
+            string  input = Console.ReadLine();
+            DateTime userDateTime = DateTime.Parse(input);
+            AddFlight("AI101", "New York", "Los Angeles", userDateTime, 6);
         }
         //display a welcome message to the filgth apllecatoins
         public static void DisplayWelcomeMessage()
@@ -83,7 +86,20 @@
                 Console.WriteLine($"{flightCodeArry[i]}\t{fromCityArry[i]}\t{toCityArry[i]}\t{departureTimeArry[i]}\t{durationArry[i]} hours");
             }
         }
+        // finding flights by the flight code
+        public static bool GetFlightCode(string flightCode)
+        {
+            for (int i = 0; i < flightCount; i++)
+            {
+                if (flightCodeArry[i] == flightCode)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+        // cancel the flight by 
 
     }
 }
