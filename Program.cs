@@ -58,7 +58,7 @@
             // Check if the flight code already exists
             for (int i = 0; i < flightCount; i++)
             {
-                if (Program.flightCode[i] == flightCode)
+                if (flightCodeArry[i] == flightCode)
                 {
                     Console.WriteLine("Flight code already exists. Please use a different flight code.");
                     return;
@@ -72,6 +72,16 @@
             durationArry[flightCount] = duration;
             flightCount++;
             Console.WriteLine("Flight added successfully!");
+        }
+        // view the flights in the system
+        public static void DisplayFlights()
+        {
+            Console.WriteLine("Available Flights:");
+            Console.WriteLine("Flight Code\tFrom City\tTo City\tDeparture Time\tDuration");
+            for (int i = 0; i < flightCount; i++)
+            {
+                Console.WriteLine($"{flightCodeArry[i]}\t{fromCityArry[i]}\t{toCityArry[i]}\t{departureTimeArry[i]}\t{durationArry[i]} hours");
+            }
         }
 
 
