@@ -12,6 +12,9 @@ namespace Airline_Reservation_Console_System
         static int[] durationArry = new int[100];
         static string[] availableFlightsArry = new string[100];
         static string[] bookedFlightsArry = new string[100];
+        static string[] passengerNameArry = new string[100];
+        static double[] tikitsPreice  = new double[100];
+        static string[] bookingID = new string[100];
         static int flightCount = 0; // to keep track of the number of flights
         // Main method to start the application
         static void Main(string[] args)
@@ -107,7 +110,9 @@ namespace Airline_Reservation_Console_System
             string toCity = Console.ReadLine();
             Console.Write("Enter duration (in hours): ");
             int duration = int.Parse(Console.ReadLine());
-            AddFlight(flightCode, fromCity, toCity, duration);
+            Console.Write("Enter price: ");
+            double price = double.Parse(Console.ReadLine());
+            AddFlight(flightCode, fromCity, toCity, duration,price);
 
         }
         // view the flights in the system
@@ -131,7 +136,6 @@ namespace Airline_Reservation_Console_System
 
             Console.WriteLine("--------------------------------------------------------------");
         }
-
         // finding flights by the flight code
         public static bool GetFlightCode(string flightCode)
         {
@@ -144,7 +148,6 @@ namespace Airline_Reservation_Console_System
             }
             return false;
         }
-
         public static DateTime GetUserDateTime()
         {
             int year, month, day, hour, minute;
@@ -165,8 +168,7 @@ namespace Airline_Reservation_Console_System
 
             return new DateTime(year, month, day, hour, minute, 0);
         }
-
-        public static void AddFlight(string flightCode, string fromCity, string toCity, int duration)
+        public static void AddFlight(string flightCode, string fromCity, string toCity, int duration,double price)
         {
             DateTime departureTime = GetUserDateTime(); // This will ask the 4 questions
 
@@ -191,7 +193,6 @@ namespace Airline_Reservation_Console_System
             Console.WriteLine("Flight added successfully!");
 
         }
-
         // UpdateFlightDeparture method to update the departure time of a flight
         public static void UpdateFlightDeparture(string flightCode, DateTime newDepartureTime)
         {
@@ -239,8 +240,33 @@ namespace Airline_Reservation_Console_System
                 {
                     Console.Write("Enter your name: ");
                     passengerName = Console.ReadLine();
+                    bookingID[flightCount] = GenerateBookingID(passengerName);
                     bookedFlightsArry[i] = passengerName;
+                    availableFlightsArry[i] = flightCode;
+                    Console.WriteLine("do you have a discount code? (Y/N)");
+                    string cheak = Console.ReadLine();
+                    // Check if the discount code is valid
+                    Console.Write("Enter the discount code: ");
+                    string  discountCode = Console.ReadLine();
+                    int discount = 0;
+                    if (cheak.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (discountCode == "discount30")
+                        {
+
+                            discount = 30;
+                            double fare = CalculateFare(tikitsPreice[i], 1, discount);
+                        }// Assuming base price is 100
+                    }
+                    else
+                    {
+                        double fare = CalculateFare(tikitsPreice[i], 1); // Assuming base price is 100
+                    }
+
+                    Console.WriteLine($"Booking ID: {bookingID[i]}");
                     Console.WriteLine($"Flight {flightCode} booked successfully for {passengerName}.");
+
+                    Console.WriteLine($"Flight {flightCode} booked successfully for {passengerName} your boking ID is {bookingID[i]}");
                     return;
                 }
             }
@@ -265,8 +291,6 @@ namespace Airline_Reservation_Console_System
             int bookingID = random.Next(1000, 9999);
             return $"{passengerName.Substring(0, 3).ToUpper()}-{bookingID}";
         }
-
-
         // Display flight details (string code)
         public static void DisplayFlightDetails(string code)
         {
@@ -310,7 +334,7 @@ namespace Airline_Reservation_Console_System
         //CalculateFare(int basePrice, int numTickets) 
         // CalculateFare(double basePrice, int numTickets)
         //  CalculateFare(int basePrice, int numTickets, int discount)
-        public static double CalculateFare(int basePrice, int numTickets, int discount)
+        public static double CalculateFare(double basePrice, int numTickets, int discount)
         {
             double totalFare = basePrice * numTickets;
             double discountedFare = totalFare - (totalFare * discount / 100);
@@ -324,8 +348,6 @@ namespace Airline_Reservation_Console_System
         {
             return basePrice * numTickets;
         }
-
-
         //System Utilities & Final Flow
         //ConfirmAction
         public static bool ConfirmAction(string message)
